@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background: #121212;
+            color: #ffffff;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #333;
+            color: #ffffff;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+        
+        button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #388e3c;
+        }
+        
+        .summary {
+            margin-top: 20px;
+            padding: 10px;
+            background: #252525;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: #252525;
+        }
+        
+        th, td {
+            border: 1px solid #444;
+            padding: 8px;
+            text-align: center;
+            color: #ffffff;
+        }
+        
+        th {
+            background: #333;
+            cursor: pointer;
+        }
+        
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .delete-btn:hover {
+            background: darkred;
+        }
+        
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .dialog-box {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .dialog-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .dialog-button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .confirm {
+            background: #4caf50;
+        }
+        
+        .cancel {
+            background: red;
+        }
+        
+        .export-btn {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: auto;
+            margin-top: 20px;
+        }
+        
+        .export-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Expense Tracker</h2>
+    <div class="container">
+        <label for="target">Monthly Target (₹):</label>
+        <input type="number" id="target" placeholder="Set monthly target">
+        <button onclick="setTarget()">Save Target</button>
+
+        <p><strong>Daily Budget:</strong> ₹<span id="daily-budget">0</span></p>
+        <p><strong>Remaining Spend Per Day:</strong> ₹<span id="remaining-per-day">0</span></p>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date">
+
+        <label for="amount">Amount Spent (₹):</label>
+        <input type="number" id="amount" placeholder="Enter amount">
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" placeholder="e.g., Food, Travel">
+
+        <button onclick="addExpense()">Add Expense</button>
+
+        <div class="summary">
+            <h3>Summary</h3>
+            <p><strong>Monthly Target:</strong> ₹<span id="monthly-target">0</span></p>
+            <p><strong>Total Spend:</strong> ₹<span id="total-spend">0</span></p>
+            <p><strong>Remaining Budget:</strong> ₹<span id="remaining-budget">0</span></p>
+        </div>
+
+        <h3>Expense List</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sortByDate()">Date ▼</th>
+                    <th>Category</th>
+                    <th>Amount (₹)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="expense-table"></tbody>
+        </table>
+
+        <h3>Daily Spend Breakdown</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Total Spend (₹)</th>
+                </tr>
+            </thead>
+            <tbody id="daily-spend-table"></tbody>
+        </table>
+
+        <button class="export-btn" onclick="exportToExcel()">Export to Excel</button>
+    </div>
+
+    <div id="confirm-dialog" class="dialog-overlay">
+        <div class="dialog-box">
+            <p>Are you sure you want to delete this expense?</p>
+            <div class="dialog-buttons">
+                <button class="dialog-button confirm" onclick="confirmDelete()">Yes</button>
+                <button class="dialog-button cancel" onclick="closeDialog()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+        let monthlyTarget = parseFloat(localStorage.getItem("monthlyTarget")) || 0;
+        let deleteIndex = null;
+        let sortAsc = true;
+
+        function setTarget() {
+            let target = parseFloat(document.getElementById("target").value);
+            if (!target) {
+                alert("Please enter a valid target amount.");
+                return;
+            }
+            localStorage.setItem("monthlyTarget", target);
+            monthlyTarget = target;
+            updateSummary();
+        }
+
+        function addExpense() {
+            let amount = parseFloat(document.getElementById("amount").value);
+            let category = document.getElementById("category").value.trim();
+            let date = document.getElementById("date").value;
+
+            if (!amount || !category || !date) {
+                alert("Please enter all details.");
+                return;
+            }
+
+            expenses.push({ amount, category, date });
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+            updateSummary();
+        }
+
+        function showDialog(index) {
+            deleteIndex = index;
+            document.getElementById("confirm-dialog").style.display = "flex";
+        }
+
+        function closeDialog() {
+            document.getElementById("confirm-dialog").style.display = "none";
+        }
+
+        function confirmDelete() {
+            expenses.splice(deleteIndex, 1);
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+            closeDialog();
+            updateSummary();
+        }
+
+        function sortByDate() {
+            expenses.sort((a, b) => sortAsc ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date));
+            sortAsc = !sortAsc;
+            localStorage.setItem("expenses", JSON.stringify(expenses)); // Save sorted data to local storage
+            updateSummary();
+        }
+
+        function updateSummary() {
+            let totalSpend = expenses.reduce((sum, e) => sum + e.amount, 0);
+            let lastExpenseDate = expenses.length ? new Date(expenses[expenses.length - 1].date) : new Date();
+            let lastDayOfMonth = new Date(lastExpenseDate.getFullYear(), lastExpenseDate.getMonth() + 1, 0);
+            let remainingDays = Math.max(1, Math.ceil((lastDayOfMonth - lastExpenseDate) / (1000 * 60 * 60 * 24)));
+            let remainingBudget = (monthlyTarget - totalSpend).toFixed(2);
+            let remainingPerDay = (remainingBudget / remainingDays).toFixed(2);
+
+            document.getElementById("monthly-target").innerText = monthlyTarget;
+            document.getElementById("total-spend").innerText = totalSpend;
+            document.getElementById("remaining-budget").innerText = remainingBudget;
+            document.getElementById("daily-budget").innerText = (monthlyTarget / lastDayOfMonth.getDate()).toFixed(2);
+            document.getElementById("remaining-per-day").innerText = remainingPerDay;
+
+            document.getElementById("expense-table").innerHTML = expenses.map((e, index) =>
+                `<tr>
+                    <td>${e.date}</td>
+                    <td>${e.category}</td>
+                    <td>₹${e.amount}</td>
+                    <td><button class="delete-btn" onclick="showDialog(${index})">Delete</button></td>
+                </tr>`).join("");
+
+            updateDailySpend();
+        }
+
+        function updateDailySpend() {
+            let dailySpend = expenses.reduce((acc, e) => {
+                if (!acc[e.date]) acc[e.date] = 0;
+                acc[e.date] += e.amount;
+                return acc;
+            }, {});
+
+            document.getElementById("daily-spend-table").innerHTML = Object.keys(dailySpend).map(date =>
+                `<tr>
+                    <td>${date}</td>
+                    <td>₹${dailySpend[date].toFixed(2)}</td>
+                </tr>`).join("");
+        }
+
+        function exportToExcel() {
+            let data = [];
+            expenses.forEach(e => {
+                data.push([e.date, e.category, e.amount]);
+            });
+
+            let dailyData = [];
+            Object.keys(expenses.reduce((acc, e) => {
+                if (!acc[e.date]) acc[e.date] = 0;
+                acc[e.date] += e.amount;
+                return acc;
+            }, {})).forEach(date => {
+                dailyData.push([date, expenses.reduce((acc, e) => e.date === date ? acc + e.amount : acc, 0)]);
+            });
+
+            let workbook = XLSX.utils.book_new();
+            let sheet1 = XLSX.utils.aoa_to_sheet([["Date", "Category", "Amount"]].concat(data));
+            let sheet2 = XLSX.utils.aoa_to_sheet([["Date", "Total Spend"]].concat(dailyData));
+
+            XLSX.utils.book_append_sheet(workbook, sheet1, "Expenses");
+            XLSX.utils.book_append_sheet(workbook, sheet2, "Daily Spend Breakdown");
+
+            XLSX.writeFile(workbook, "Expense_Tracker.xlsx");
+        }
+
+        updateSummary();
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+
+</body>
+</html>
