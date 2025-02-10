@@ -135,6 +135,7 @@
             cursor: pointer;
             width: auto;
             margin-top: 20px;
+            margin-right: 15px; /* Add space between buttons */
         }
         
         .export-btn:hover {
@@ -194,8 +195,40 @@
             </thead>
             <tbody id="daily-spend-table"></tbody>
         </table>
-
+        
         <button class="export-btn" onclick="exportToExcel()">Export to Excel</button>
+        
+        <button class="export-btn" style="background: green;" onclick="completeExpenses()">Complete</button>
+        <button class="export-btn" style="background: red;" onclick="clearDailyExpenses()">Clear</button>
+        
+        <h3>Monthly Breakdown</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Total Spend (₹)</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="monthly-breakdown-table"></tbody>
+        </table>
+        
+        <!-- Area to show full details when button is clicked -->
+        <div id="monthly-details" class="summary" style="display: none;">
+            <h3>Monthly Expense Details</h3>
+            <p><strong>Month:</strong> <span id="detail-month"></span></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Amount (₹)</th>
+                    </tr>
+                </thead>
+                <tbody id="details-table"></tbody>
+            </table>
+        </div>
+        
     </div>
 
     <div id="confirm-dialog" class="dialog-overlay">
@@ -213,6 +246,7 @@
         let monthlyTarget = parseFloat(localStorage.getItem("monthlyTarget")) || 0;
         let deleteIndex = null;
         let sortAsc = true;
+        let sortMonthlyAsc = true;
 
         function setTarget() {
             let target = parseFloat(document.getElementById("target").value);
@@ -301,33 +335,158 @@
                     <td>₹${dailySpend[date].toFixed(2)}</td>
                 </tr>`).join("");
         }
-
+        
+        function completeExpenses() {
+            let confirmation = confirm("Are you sure you want to close this month? This will move expenses to monthly breakdown.");
+            
+            if (confirmation) {
+                let monthlyData = JSON.parse(localStorage.getItem("monthlyData")) || {};
+                let backupExpenses = JSON.parse(localStorage.getItem("expenses")) || []; // Backup
+        
+                backupExpenses.forEach(e => {
+                    let dateObj = new Date(e.date);
+                    let monthKey = dateObj.toLocaleString('en-US', { month: 'short' }).toUpperCase() + "-" + dateObj.getFullYear().toString().slice(-2);
+            
+                    if (!monthlyData[monthKey]) {
+                        monthlyData[monthKey] = { total: 0, details: [] };
+                    }
+            
+                    monthlyData[monthKey].total += e.amount;
+                    monthlyData[monthKey].details.push(e);
+                });
+        
+                localStorage.setItem("monthlyData", JSON.stringify(monthlyData));
+        
+                expenses = [];  // Clear daily expenses after saving
+                localStorage.removeItem("expenses");
+        
+                updateSummary();
+                updateMonthlyBreakdown();
+                alert("Expenses moved to monthly breakdown!");
+            }
+        }
+        
+        function clearDailyExpenses() {
+            let confirmation = confirm("Are you sure you want to clear all daily expenses?");
+            
+            if (confirmation) {
+                expenses = [];  // Clear only daily expenses
+                localStorage.removeItem("expenses");
+                updateSummary();
+                alert("Daily expenses cleared!");
+            }
+            // If the user clicks "No" or closes the dialog, nothing happens.
+        }
+        
+        
+        function updateMonthlyBreakdown() {
+            let monthlyData = JSON.parse(localStorage.getItem("monthlyData")) || {};
+            
+            // Sort months (latest first)
+            let sortedMonths = Object.keys(monthlyData).sort((a, b) => {
+                let [monthA, yearA] = a.split("-");
+                let [monthB, yearB] = b.split("-");
+                let dateA = new Date(`20${yearA}`, getMonthIndex(monthA));
+                let dateB = new Date(`20${yearB}`, getMonthIndex(monthB));
+                return dateB - dateA; // Latest first
+            });
+        
+            // Generate rows
+            document.getElementById("monthly-breakdown-table").innerHTML = sortedMonths.map(month =>
+                `<tr>
+                    <td>${month}</td>
+                    <td class="spend-column">₹${monthlyData[month].total.toFixed(2)}</td>
+                    <td><button class="full_detail-btn" onclick="showFullDetails('${month}')">Full Detail</button></td>
+                </tr>`
+            ).join("");
+        
+            // Reapply sorting if needed
+            sortMonthlyExpenses();
+        }
+        
+        // Function to convert month abbreviation to index
+        function getMonthIndex(monthAbbr) {
+            const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            return months.indexOf(monthAbbr);
+        }
+        
+        // Function to toggle sorting of spend column
+        function sortMonthlyExpenses() {
+            let table = document.getElementById("monthly-breakdown-table");
+            let rows = Array.from(table.querySelectorAll("tr"));
+        
+            rows.sort((rowA, rowB) => {
+                let spendA = parseFloat(rowA.querySelector(".spend-column").innerText.replace("₹", ""));
+                let spendB = parseFloat(rowB.querySelector(".spend-column").innerText.replace("₹", ""));
+                return sortMonthlyAsc ? spendA - spendB : spendB - spendA;
+            });
+        
+            // Toggle sorting direction
+            sortMonthlyAsc = !sortMonthlyAsc;
+        
+            // Apply sorted rows back to the table
+            table.innerHTML = "";
+            rows.forEach(row => table.appendChild(row));
+        }
+        
+        // Call function to update monthly breakdown whenever the script runs
+        updateMonthlyBreakdown();
+        
+        function showFullDetails(month) {
+            let monthlyData = JSON.parse(localStorage.getItem("monthlyData")) || {};
+            
+            if (!monthlyData[month]) {
+                alert("No details found for this month.");
+                return;
+            }
+        
+            let details = monthlyData[month].details;
+        
+            document.getElementById("detail-month").innerText = month;
+            document.getElementById("details-table").innerHTML = details.map(e =>
+                `<tr>
+                    <td>${e.date}</td>
+                    <td>${e.category}</td>
+                    <td>₹${e.amount}</td>
+                </tr>`
+            ).join("");
+        
+            document.getElementById("monthly-details").style.display = "block";
+        }
+        
+       
         function exportToExcel() {
-            let data = [];
-            expenses.forEach(e => {
-                data.push([e.date, e.category, e.amount]);
-            });
-
-            let dailyData = [];
-            Object.keys(expenses.reduce((acc, e) => {
-                if (!acc[e.date]) acc[e.date] = 0;
-                acc[e.date] += e.amount;
-                return acc;
-            }, {})).forEach(date => {
-                dailyData.push([date, expenses.reduce((acc, e) => e.date === date ? acc + e.amount : acc, 0)]);
-            });
-
+            let monthlyData = JSON.parse(localStorage.getItem("monthlyData")) || {};
+        
+            if (Object.keys(monthlyData).length === 0) {
+                alert("No monthly expense data to export.");
+                return;
+            }
+        
             let workbook = XLSX.utils.book_new();
-            let sheet1 = XLSX.utils.aoa_to_sheet([["Date", "Category", "Amount"]].concat(data));
-            let sheet2 = XLSX.utils.aoa_to_sheet([["Date", "Total Spend"]].concat(dailyData));
-
-            XLSX.utils.book_append_sheet(workbook, sheet1, "Expenses");
-            XLSX.utils.book_append_sheet(workbook, sheet2, "Daily Spend Breakdown");
-
-            XLSX.writeFile(workbook, "Expense_Tracker.xlsx");
+        
+            Object.keys(monthlyData).forEach(month => {
+                let details = monthlyData[month].details;
+                let totalSpend = monthlyData[month].total;
+        
+                let data = [["Date", "Category", "Amount"]];
+                details.forEach(e => {
+                    data.push([e.date, e.category, e.amount]);
+                });
+        
+                // Add total spend row at the bottom
+                data.push(["", "Total Spend", totalSpend]);
+        
+                let sheet = XLSX.utils.aoa_to_sheet(data);
+                XLSX.utils.book_append_sheet(workbook, sheet, month);
+            });
+        
+            let fileName = "Monthly_Expenses.xlsx";
+            XLSX.writeFile(workbook, fileName);
         }
 
         updateSummary();
+        updateMonthlyBreakdown();
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
