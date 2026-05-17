@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -129,7 +130,7 @@ button{
     color:white;
     cursor:pointer;
     transition:0.2s;
-    min-width:110px;
+    min-width:100px;
 }
 
 button:hover{
@@ -304,9 +305,9 @@ tr{
     }
 
     button{
-        padding:9px 12px;
+        padding:8px 12px;
         font-size:12px;
-        min-width:95px;
+        min-width:90px;
     }
 
 }
@@ -463,8 +464,7 @@ onclick="sortExpensesByAmount()">
 Amount ↕
 </th>
 
-<th id="action-head"
-class="hidden">
+<th id="action-head" class="hidden">
 Action
 </th>
 
@@ -601,6 +601,9 @@ let monthlySortDirection = true;
 document.getElementById("date")
 .valueAsDate = new Date();
 
+document.getElementById("target")
+.value = monthlyTarget || "";
+
 updateSuggestions();
 
 function formatDate(date){
@@ -703,7 +706,7 @@ function addExpense(){
         document.getElementById("amount").value
     );
 
-    if(!date || !item || !category || !amount){
+    if(!date || !item || !category || isNaN(amount)){
 
         alert("Fill all fields");
         return;
@@ -767,7 +770,11 @@ function updateSummary(){
     monthlyTarget - total;
 
     let remainingPerDay =
-    remainingBudget / remainingDays;
+    remainingDays > 0
+    ?
+    remainingBudget / remainingDays
+    :
+    0;
 
     document.getElementById(
         "monthly-target"
@@ -801,6 +808,9 @@ function updateSummary(){
 }
 
 function renderExpenses(){
+
+    document.getElementById("action-head")
+    .classList.toggle("hidden", !editMode);
 
     document.getElementById(
         "expense-table"
@@ -852,10 +862,6 @@ function deleteExpense(index){
 function toggleEditMode(){
 
     editMode = !editMode;
-
-    document.getElementById(
-        "action-head"
-    ).classList.toggle("hidden");
 
     renderExpenses();
 
@@ -1020,7 +1026,24 @@ function sortDailyByDate(){
         document.querySelectorAll("#daily-table tr")
     );
 
-    rows.reverse();
+    rows.sort((a,b)=>{
+
+        let dateA =
+        a.cells[0].innerText.split('/').reverse().join('-');
+
+        let dateB =
+        b.cells[0].innerText.split('/').reverse().join('-');
+
+        return dailySortDirection
+        ?
+        new Date(dateA)-new Date(dateB)
+        :
+        new Date(dateB)-new Date(dateA);
+
+    });
+
+    dailySortDirection =
+    !dailySortDirection;
 
     let table =
     document.getElementById("daily-table");
@@ -1054,11 +1077,8 @@ function sortDailyByAmount(){
 
         return dailySortDirection
         ?
-
         amountA-amountB
-
         :
-
         amountB-amountA;
 
     });
@@ -1078,6 +1098,13 @@ function sortDailyByAmount(){
 }
 
 function completeMonth(){
+
+    if(expenses.length===0){
+
+        alert("No expenses to complete");
+        return;
+
+    }
 
     if(!confirm("Complete current month?"))
     return;
@@ -1190,11 +1217,8 @@ function sortMonthlyCards(){
 
         monthlySortDirection
         ?
-
         a[1].total-b[1].total
-
         :
-
         b[1].total-a[1].total
 
     );
@@ -1368,6 +1392,40 @@ function exportExcel(){
         );
 
     });
+
+    if(expenses.length>0){
+
+        let currentRows=[
+
+            ["Date","Item","Category","Amount"]
+
+        ];
+
+        expenses.forEach(e=>{
+
+            currentRows.push([
+
+                e.date,
+                e.item,
+                e.category,
+                e.amount
+
+            ]);
+
+        });
+
+        let currentSheet =
+        XLSX.utils.aoa_to_sheet(currentRows);
+
+        XLSX.utils.book_append_sheet(
+
+            workbook,
+            currentSheet,
+            "Current Month"
+
+        );
+
+    }
 
     XLSX.writeFile(
         workbook,
