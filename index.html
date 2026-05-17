@@ -22,7 +22,14 @@ body{
     font-family:'Poppins',sans-serif;
     background:#0f172a;
     color:white;
-    padding:15px;
+    padding:14px;
+    user-select:none;
+    -webkit-user-select:none;
+}
+
+input{
+    user-select:auto;
+    -webkit-user-select:auto;
 }
 
 .container{
@@ -32,33 +39,33 @@ body{
 
 .title{
     text-align:center;
-    font-size:34px;
+    font-size:32px;
     font-weight:700;
-    margin-bottom:25px;
+    margin-bottom:22px;
 }
 
 .top-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-    margin-bottom:25px;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:14px;
+    margin-bottom:22px;
 }
 
 .card{
     background:linear-gradient(145deg,#1e293b,#111827);
-    border-radius:24px;
-    padding:22px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.35);
+    border-radius:22px;
+    padding:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
 }
 
 .card-title{
+    font-size:13px;
     color:#94a3b8;
-    font-size:14px;
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .card-value{
-    font-size:28px;
+    font-size:24px;
     font-weight:700;
 }
 
@@ -80,44 +87,53 @@ body{
 
 .form-section{
     background:#111827;
-    padding:20px;
     border-radius:24px;
-    margin-bottom:25px;
+    padding:20px;
+    margin-bottom:24px;
 }
 
 .form-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;
 }
 
 input{
     width:100%;
-    padding:14px;
+    padding:12px 14px;
     border:none;
-    border-radius:16px;
+    border-radius:14px;
     background:#1e293b;
     color:white;
+    font-size:14px;
     outline:none;
-    font-size:15px;
 }
 
 input:focus{
     border:2px solid #3b82f6;
 }
 
+.button-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:16px;
+}
+
 button{
     border:none;
-    border-radius:16px;
-    padding:14px;
+    border-radius:12px;
+    padding:10px 16px;
+    font-size:13px;
     font-weight:600;
     color:white;
     cursor:pointer;
     transition:0.2s;
+    min-width:110px;
 }
 
 button:hover{
-    transform:translateY(-2px);
+    transform:translateY(-1px);
 }
 
 .add-btn{
@@ -141,88 +157,109 @@ button:hover{
 }
 
 .search-box{
-    margin-top:15px;
+    margin-top:16px;
 }
 
 .section{
-    margin-top:25px;
+    margin-top:24px;
+}
+
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
 }
 
 .section-title{
-    font-size:26px;
-    margin-bottom:15px;
+    font-size:24px;
     font-weight:700;
 }
 
 .table-container{
     overflow:auto;
+    border-radius:18px;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
-    overflow:hidden;
-    border-radius:18px;
 }
 
 th{
     background:#1e293b;
-    padding:15px;
+    padding:14px;
+    font-size:14px;
 }
 
 td{
     background:#111827;
-    padding:14px;
+    padding:13px;
     text-align:center;
+    font-size:14px;
 }
 
-.month-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+tr{
+    border-bottom:1px solid #1e293b;
 }
 
-.month-card{
-    background:linear-gradient(145deg,#1e293b,#111827);
-    border-radius:22px;
-    padding:20px;
-    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+.sortable{
+    cursor:pointer;
+    transition:0.2s;
 }
 
-.month-name{
-    font-size:24px;
-    font-weight:700;
-}
-
-.month-total{
-    margin-top:10px;
-    color:#22c55e;
-    font-size:22px;
-    font-weight:600;
-}
-
-.month-buttons{
-    display:flex;
-    gap:10px;
-    margin-top:18px;
-}
-
-.month-buttons button{
-    flex:1;
-}
-
-.detail-box{
-    margin-top:25px;
-    background:#111827;
-    border-radius:24px;
-    padding:20px;
+.sortable:hover{
+    background:#334155;
 }
 
 .hidden{
     display:none;
 }
 
-.header-flex{
+.month-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+}
+
+.month-card{
+    background:linear-gradient(145deg,#1e293b,#111827);
+    border-radius:22px;
+    padding:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+}
+
+.month-name{
+    font-size:22px;
+    font-weight:700;
+}
+
+.month-total{
+    margin-top:8px;
+    font-size:20px;
+    color:#22c55e;
+    font-weight:600;
+}
+
+.month-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+}
+
+.month-buttons button{
+    flex:1;
+    min-width:auto;
+}
+
+.detail-box{
+    margin-top:24px;
+    background:#111827;
+    border-radius:22px;
+    padding:20px;
+}
+
+.detail-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -230,25 +267,46 @@ td{
 }
 
 .close-btn{
-    width:45px;
-    height:45px;
+    width:38px;
+    height:38px;
     border-radius:50%;
     background:#ef4444;
     padding:0;
+    min-width:auto;
+}
+
+.delete-small{
+    padding:8px 12px;
+    border-radius:10px;
+    font-size:12px;
 }
 
 @media(max-width:700px){
 
     .title{
-        font-size:28px;
+        font-size:26px;
     }
 
     .card-value{
-        font-size:22px;
+        font-size:21px;
+    }
+
+    .section-title{
+        font-size:20px;
     }
 
     table{
         font-size:12px;
+    }
+
+    th,td{
+        padding:10px;
+    }
+
+    button{
+        padding:9px 12px;
+        font-size:12px;
+        min-width:95px;
     }
 
 }
@@ -332,31 +390,31 @@ placeholder="Amount">
 
 </div>
 
-<div class="form-grid" style="margin-top:15px;">
+<div class="button-row">
 
 <button class="add-btn"
 onclick="addExpense()">
-Add Expense
+Add
 </button>
 
 <button class="edit-btn"
 onclick="toggleEditMode()">
-Edit Mode
+Edit
 </button>
 
 <button class="export-btn"
 onclick="exportExcel()">
-Export Excel
+Export
 </button>
 
 <button class="complete-btn"
 onclick="completeMonth()">
-Complete Month
+Complete
 </button>
 
 <button class="clear-btn"
 onclick="clearExpenses()">
-Clear Current
+Clear
 </button>
 
 </div>
@@ -364,15 +422,17 @@ Clear Current
 <input type="text"
 id="search"
 class="search-box"
-placeholder="Search item/category/date..."
+placeholder="Search item, category, date..."
 onkeyup="searchExpenses()">
 
 </div>
 
 <div class="section">
 
+<div class="section-header">
 <div class="section-title">
 Expense List
+</div>
 </div>
 
 <div class="table-container">
@@ -383,11 +443,28 @@ Expense List
 
 <tr>
 
-<th>Date</th>
-<th>Item</th>
-<th>Category</th>
-<th>Amount</th>
-<th id="action-head" class="hidden">
+<th class="sortable"
+onclick="sortExpensesByDate()">
+Date ↕
+</th>
+
+<th class="sortable"
+onclick="sortExpensesByItem()">
+Item ↕
+</th>
+
+<th class="sortable"
+onclick="sortExpensesByCategory()">
+Category ↕
+</th>
+
+<th class="sortable"
+onclick="sortExpensesByAmount()">
+Amount ↕
+</th>
+
+<th id="action-head"
+class="hidden">
 Action
 </th>
 
@@ -405,8 +482,10 @@ Action
 
 <div class="section">
 
+<div class="section-header">
 <div class="section-title">
 Daily Breakdown
+</div>
 </div>
 
 <div class="table-container">
@@ -416,8 +495,17 @@ Daily Breakdown
 <thead>
 
 <tr>
-<th>Date</th>
-<th>Total Spend</th>
+
+<th class="sortable"
+onclick="sortDailyByDate()">
+Date ↕
+</th>
+
+<th class="sortable"
+onclick="sortDailyByAmount()">
+Total ↕
+</th>
+
 </tr>
 
 </thead>
@@ -432,8 +520,13 @@ Daily Breakdown
 
 <div class="section">
 
-<div class="section-title">
-Monthly Breakdown
+<div class="section-header">
+
+<div class="section-title sortable"
+onclick="sortMonthlyCards()">
+Monthly Breakdown ↕
+</div>
+
 </div>
 
 <div class="month-grid"
@@ -444,7 +537,7 @@ id="month-grid"></div>
 <div id="detail-box"
 class="detail-box hidden">
 
-<div class="header-flex">
+<div class="detail-header">
 
 <h2 id="detail-title"></h2>
 
@@ -501,6 +594,10 @@ parseFloat(localStorage.getItem("monthlyTarget"))
 
 let editMode = false;
 
+let expenseSortDirection = true;
+let dailySortDirection = true;
+let monthlySortDirection = true;
+
 document.getElementById("date")
 .valueAsDate = new Date();
 
@@ -537,25 +634,19 @@ function saveStorage(){
 
 }
 
-function setTarget(){
+document.getElementById("target")
+.addEventListener("change",()=>{
 
-    let val =
+    monthlyTarget =
     parseFloat(
         document.getElementById("target").value
-    );
-
-    if(!val) return;
-
-    monthlyTarget = val;
+    ) || 0;
 
     saveStorage();
 
     updateSummary();
 
-}
-
-document.getElementById("target")
-.addEventListener("change",setTarget);
+});
 
 function autoFillCategory(){
 
@@ -579,14 +670,14 @@ function updateSuggestions(){
     let list =
     document.getElementById("item-list");
 
-    list.innerHTML = "";
+    list.innerHTML="";
 
     Object.keys(itemMemory).forEach(item=>{
 
         let option =
         document.createElement("option");
 
-        option.value = item;
+        option.value=item;
 
         list.appendChild(option);
 
@@ -666,20 +757,17 @@ function updateSummary(){
     let totalDays =
     lastDay.getDate();
 
-    let currentDay =
-    today.getDate();
-
     let remainingDays =
-    totalDays-currentDay+1;
+    totalDays - today.getDate() + 1;
 
     let dailyBudget =
-    monthlyTarget/totalDays;
+    monthlyTarget / totalDays;
 
     let remainingBudget =
-    monthlyTarget-total;
+    monthlyTarget - total;
 
     let remainingPerDay =
-    remainingBudget/remainingDays;
+    remainingBudget / remainingDays;
 
     document.getElementById(
         "monthly-target"
@@ -722,86 +810,18 @@ function renderExpenses(){
 
         `<tr>
 
-        <td>
+        <td>${formatDate(e.date)}</td>
 
-        ${
-            editMode
-            ?
-            `<input type="date"
-            value="${e.date}"
-            onchange="
-            updateExpense(
-            ${index},
-            'date',
-            this.value
-            )">`
-            :
-            formatDate(e.date)
-        }
+        <td>${e.item}</td>
 
-        </td>
+        <td>${e.category}</td>
 
-        <td>
-
-        ${
-            editMode
-            ?
-            `<input type="text"
-            value="${e.item}"
-            onchange="
-            updateExpense(
-            ${index},
-            'item',
-            this.value
-            )">`
-            :
-            e.item
-        }
-
-        </td>
-
-        <td>
-
-        ${
-            editMode
-            ?
-            `<input type="text"
-            value="${e.category}"
-            onchange="
-            updateExpense(
-            ${index},
-            'category',
-            this.value
-            )">`
-            :
-            e.category
-        }
-
-        </td>
-
-        <td>
-
-        ${
-            editMode
-            ?
-            `<input type="number"
-            value="${e.amount}"
-            onchange="
-            updateExpense(
-            ${index},
-            'amount',
-            this.value
-            )">`
-            :
-            "₹"+e.amount.toFixed(2)
-        }
-
-        </td>
+        <td>₹${e.amount.toFixed(2)}</td>
 
         <td class="${editMode ? '' : 'hidden'}">
 
         <button
-        class="clear-btn"
+        class="clear-btn delete-small"
         onclick="deleteExpense(${index})">
 
         Delete
@@ -813,22 +833,6 @@ function renderExpenses(){
         </tr>`
 
     ).join("");
-
-}
-
-function updateExpense(index,key,val){
-
-    if(key==="amount"){
-
-        val=parseFloat(val);
-
-    }
-
-    expenses[index][key]=val;
-
-    saveStorage();
-
-    updateSummary();
 
 }
 
@@ -847,7 +851,7 @@ function deleteExpense(index){
 
 function toggleEditMode(){
 
-    editMode=!editMode;
+    editMode = !editMode;
 
     document.getElementById(
         "action-head"
@@ -918,6 +922,158 @@ function searchExpenses(){
         : "none";
 
     });
+
+}
+
+function sortExpensesByDate(){
+
+    expenses.sort((a,b)=>
+
+        expenseSortDirection
+        ?
+
+        new Date(a.date)-new Date(b.date)
+
+        :
+
+        new Date(b.date)-new Date(a.date)
+
+    );
+
+    expenseSortDirection =
+    !expenseSortDirection;
+
+    renderExpenses();
+
+}
+
+function sortExpensesByItem(){
+
+    expenses.sort((a,b)=>
+
+        expenseSortDirection
+        ?
+
+        a.item.localeCompare(b.item)
+
+        :
+
+        b.item.localeCompare(a.item)
+
+    );
+
+    expenseSortDirection =
+    !expenseSortDirection;
+
+    renderExpenses();
+
+}
+
+function sortExpensesByCategory(){
+
+    expenses.sort((a,b)=>
+
+        expenseSortDirection
+        ?
+
+        a.category.localeCompare(b.category)
+
+        :
+
+        b.category.localeCompare(a.category)
+
+    );
+
+    expenseSortDirection =
+    !expenseSortDirection;
+
+    renderExpenses();
+
+}
+
+function sortExpensesByAmount(){
+
+    expenses.sort((a,b)=>
+
+        expenseSortDirection
+        ?
+
+        a.amount-b.amount
+
+        :
+
+        b.amount-a.amount
+
+    );
+
+    expenseSortDirection =
+    !expenseSortDirection;
+
+    renderExpenses();
+
+}
+
+function sortDailyByDate(){
+
+    let rows =
+    Array.from(
+        document.querySelectorAll("#daily-table tr")
+    );
+
+    rows.reverse();
+
+    let table =
+    document.getElementById("daily-table");
+
+    table.innerHTML="";
+
+    rows.forEach(row=>
+        table.appendChild(row)
+    );
+
+}
+
+function sortDailyByAmount(){
+
+    let rows =
+    Array.from(
+        document.querySelectorAll("#daily-table tr")
+    );
+
+    rows.sort((a,b)=>{
+
+        let amountA =
+        parseFloat(
+            a.cells[1].innerText.replace("₹","")
+        );
+
+        let amountB =
+        parseFloat(
+            b.cells[1].innerText.replace("₹","")
+        );
+
+        return dailySortDirection
+        ?
+
+        amountA-amountB
+
+        :
+
+        amountB-amountA;
+
+    });
+
+    dailySortDirection =
+    !dailySortDirection;
+
+    let table =
+    document.getElementById("daily-table");
+
+    table.innerHTML="";
+
+    rows.forEach(row=>
+        table.appendChild(row)
+    );
 
 }
 
@@ -996,9 +1152,7 @@ function renderMonths(){
         </div>
 
         <div class="month-total">
-        ₹${monthlyData[month]
-        .total
-        .toFixed(2)}
+        ₹${monthlyData[month].total.toFixed(2)}
         </div>
 
         <div class="month-buttons">
@@ -1008,14 +1162,6 @@ function renderMonths(){
         onclick="viewMonth('${month}')">
 
         View
-
-        </button>
-
-        <button
-        class="edit-btn"
-        onclick="editMonth('${month}')">
-
-        Edit
 
         </button>
 
@@ -1032,6 +1178,42 @@ function renderMonths(){
         </div>`
 
     ).join("");
+
+}
+
+function sortMonthlyCards(){
+
+    let entries =
+    Object.entries(monthlyData);
+
+    entries.sort((a,b)=>
+
+        monthlySortDirection
+        ?
+
+        a[1].total-b[1].total
+
+        :
+
+        b[1].total-a[1].total
+
+    );
+
+    monthlySortDirection =
+    !monthlySortDirection;
+
+    let sortedData={};
+
+    entries.forEach(entry=>{
+
+        sortedData[entry[0]] =
+        entry[1];
+
+    });
+
+    monthlyData = sortedData;
+
+    renderMonths();
 
 }
 
@@ -1061,91 +1243,12 @@ function viewMonth(month){
 
         <td>${e.category}</td>
 
-        <td>
-        ₹${e.amount.toFixed(2)}
-        </td>
-
-        <td>-</td>
-
-        </tr>`
-
-    ).join("");
-
-}
-
-function editMonth(month){
-
-    document.getElementById(
-        "detail-box"
-    ).classList.remove("hidden");
-
-    document.getElementById(
-        "detail-title"
-    ).innerText =
-    month + " (Edit Mode)";
-
-    document.getElementById(
-        "detail-table"
-    ).innerHTML =
-
-    monthlyData[month]
-    .details
-    .map((e,index)=>
-
-        `<tr>
-
-        <td>
-
-        <input
-        type="date"
-        value="${e.date}"
-        onchange="
-        monthlyData['${month}']
-        .details[${index}]
-        .date=this.value">
-
-        </td>
-
-        <td>
-
-        <input
-        type="text"
-        value="${e.item}"
-        onchange="
-        monthlyData['${month}']
-        .details[${index}]
-        .item=this.value">
-
-        </td>
-
-        <td>
-
-        <input
-        type="text"
-        value="${e.category}"
-        onchange="
-        monthlyData['${month}']
-        .details[${index}]
-        .category=this.value">
-
-        </td>
-
-        <td>
-
-        <input
-        type="number"
-        value="${e.amount}"
-        onchange="
-        monthlyData['${month}']
-        .details[${index}]
-        .amount=parseFloat(this.value)">
-
-        </td>
+        <td>₹${e.amount.toFixed(2)}</td>
 
         <td>
 
         <button
-        class="clear-btn"
+        class="clear-btn delete-small"
         onclick="
         deleteMonthRow(
         '${month}',
@@ -1160,53 +1263,13 @@ function editMonth(month){
 
         </tr>`
 
-    ).join("")
-
-    +
-
-    `<tr>
-
-    <td colspan="5">
-
-    <button
-    class="add-btn"
-    onclick="saveMonth('${month}')">
-
-    Save Changes
-
-    </button>
-
-    </td>
-
-    </tr>`;
-
-}
-
-function saveMonth(month){
-
-    monthlyData[month].total =
-
-    monthlyData[month]
-    .details
-    .reduce((s,e)=>
-
-        s + Number(e.amount),
-
-        0
-
-    );
-
-    saveStorage();
-
-    renderMonths();
-
-    alert("Saved");
+    ).join("");
 
 }
 
 function deleteMonth(month){
 
-    if(!confirm("Delete full month?"))
+    if(!confirm("Delete month?"))
     return;
 
     delete monthlyData[month];
@@ -1228,21 +1291,23 @@ function deleteMonthRow(month,index){
     .details
     .splice(index,1);
 
-    if(
-        monthlyData[month]
-        .details
-        .length===0
-    ){
+    monthlyData[month].total =
 
-        delete monthlyData[month];
+    monthlyData[month]
+    .details
+    .reduce((s,e)=>
 
-        closeDetail();
+        s + Number(e.amount),
 
-    }
+        0
 
-    saveMonth(month);
+    );
 
-    editMonth(month);
+    saveStorage();
+
+    renderMonths();
+
+    viewMonth(month);
 
 }
 
