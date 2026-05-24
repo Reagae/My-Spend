@@ -13,6 +13,9 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         body {
@@ -346,6 +349,8 @@
             font-size: 15px;
             outline: none;
             font-family: 'Poppins', sans-serif;
+            user-select: text;
+            -webkit-user-select: text;
         }
 
         .save-btn {
@@ -1102,12 +1107,19 @@
             let remaining;
             let daily;
 
-            // Filter logic
+            // FILTER LOGIC
             if(currentFilter === "today"){
 
-                remaining = dailyRemaining;
+                // Never show negative amount
+                remaining =
+                dailyRemaining > 0
+                ? dailyRemaining
+                : 0;
 
-                daily = dailyRemaining;
+                daily =
+                dailyRemaining > 0
+                ? dailyRemaining
+                : 0;
 
             }
             else{
@@ -1133,14 +1145,30 @@
             let remainingEl =
             document.getElementById("remainingBudget");
 
-            remainingEl.innerText =
-            remaining < 0
-            ? "-" + formatCurrency(Math.abs(remaining))
-            : formatCurrency(remaining);
+            if(currentFilter === "today" && dailyRemaining < 0){
+
+                remainingEl.innerText = "Daily Limit Exceeded";
+
+            }
+            else if(currentFilter !== "today" && monthlyRemaining < 0){
+
+                remainingEl.innerText = "Monthly Budget Exceeded";
+
+            }
+            else{
+
+                remainingEl.innerText =
+                formatCurrency(remaining);
+
+            }
 
             remainingEl.style.color =
-            remaining < 0
-            ? "#fecaca"
+            (
+                (currentFilter === "today" && dailyRemaining < 0)
+                ||
+                (currentFilter !== "today" && monthlyRemaining < 0)
+            )
+            ? "#ef4444"
             : "white";
 
             document.getElementById("dailyBudget")
