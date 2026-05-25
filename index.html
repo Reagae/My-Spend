@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -546,7 +547,244 @@
         ::-webkit-scrollbar-thumb:hover{
             background:#475569;
         }
-    </style>
+
+        .settings-grid{
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+
+        .settings-card{
+            background:linear-gradient(145deg,#111827,#1e293b);
+            border-radius:24px;
+            padding:20px;
+            display:flex;
+            gap:18px;
+            align-items:flex-start;
+            box-shadow:0 8px 24px rgba(0,0,0,0.25);
+            transition:0.25s ease;
+            border:1px solid rgba(255,255,255,0.04);
+        }
+
+        .settings-card:hover{
+            transform:translateY(-3px);
+        }
+
+        .settings-icon{
+            width:58px;
+            height:58px;
+            border-radius:18px;
+            background:#0f172a;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:28px;
+            flex-shrink:0;
+        }
+
+        .settings-content{
+            flex:1;
+        }
+
+        .settings-heading{
+            font-size:18px;
+            font-weight:700;
+            margin-bottom:4px;
+        }
+
+        .settings-subtitle{
+            font-size:13px;
+            color:#94a3b8;
+            margin-bottom:16px;
+            line-height:1.5;
+        }
+
+        .settings-btn{
+            border:none;
+            height:48px;
+            padding:0 18px;
+            border-radius:14px;
+            font-size:14px;
+            font-weight:700;
+            color:white;
+            cursor:pointer;
+            transition:0.25s ease;
+        }
+
+        .settings-btn:hover{
+            transform:scale(1.02);
+        }
+
+        .blue-btn{
+            background:linear-gradient(135deg,#3b82f6,#2563eb);
+        }
+
+        .green-btn{
+            background:linear-gradient(135deg,#22c55e,#16a34a);
+        }
+
+        .purple-btn{
+            background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+        }
+
+        .red-btn{
+            background:linear-gradient(135deg,#ef4444,#dc2626);
+        }
+
+        .danger-card{
+            border:1px solid rgba(239,68,68,0.2);
+        }
+
+        @media(max-width:600px){
+
+            .settings-card{
+                flex-direction:column;
+            }
+
+            .settings-icon{
+                width:52px;
+                height:52px;
+                font-size:24px;
+            }
+
+            .settings-btn{
+                width:100%;
+            }
+        }
+        .budget-input-wrap{
+            display:flex;
+            gap:12px;
+            align-items:center;
+        }
+
+        .budget-save-btn{
+            width:52px;
+            height:52px;
+            border:none;
+            border-radius:16px;
+            background:linear-gradient(135deg,#22c55e,#16a34a);
+            color:white;
+            font-size:22px;
+            font-weight:700;
+            cursor:pointer;
+            transition:0.25s ease;
+            flex-shrink:0;
+        }
+
+        .budget-save-btn:disabled{
+            opacity:0.4;
+            cursor:not-allowed;
+            transform:none;
+        }
+
+        .budget-save-btn:not(:disabled):hover{
+            transform:scale(1.05);
+        }
+
+        .settings-grid{
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+
+        .settings-card{
+            background:linear-gradient(145deg,#111827,#1e293b);
+            border-radius:24px;
+            padding:20px;
+            display:flex;
+            gap:18px;
+            align-items:flex-start;
+            box-shadow:0 8px 24px rgba(0,0,0,0.25);
+            transition:0.25s ease;
+            border:1px solid rgba(255,255,255,0.04);
+        }
+
+        .settings-card:hover{
+            transform:translateY(-3px);
+        }
+
+        .settings-icon{
+            width:58px;
+            height:58px;
+            border-radius:18px;
+            background:#0f172a;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:28px;
+            flex-shrink:0;
+        }
+
+        .settings-content{
+            flex:1;
+        }
+
+        .settings-heading{
+            font-size:18px;
+            font-weight:700;
+            margin-bottom:4px;
+        }
+
+        .settings-subtitle{
+            font-size:13px;
+            color:#94a3b8;
+            margin-bottom:16px;
+            line-height:1.5;
+        }
+
+        .settings-btn{
+            border:none;
+            height:48px;
+            padding:0 18px;
+            border-radius:14px;
+            font-size:14px;
+            font-weight:700;
+            color:white;
+            cursor:pointer;
+            transition:0.25s ease;
+        }
+
+        .settings-btn:hover{
+            transform:scale(1.02);
+        }
+
+        .blue-btn{
+            background:linear-gradient(135deg,#3b82f6,#2563eb);
+        }
+
+        .green-btn{
+            background:linear-gradient(135deg,#22c55e,#16a34a);
+        }
+
+        .purple-btn{
+            background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+        }
+
+        .red-btn{
+            background:linear-gradient(135deg,#ef4444,#dc2626);
+        }
+
+        .danger-card{
+            border:1px solid rgba(239,68,68,0.2);
+        }
+
+        @media(max-width:600px){
+
+            .settings-card{
+                flex-direction:column;
+            }
+
+            .settings-icon{
+                width:52px;
+                height:52px;
+                font-size:24px;
+            }
+
+            .settings-btn{
+                width:100%;
+            }
+        }
+   </style>
 </head>
 
 <body>
@@ -631,71 +869,153 @@
     </div>
     <div id="settingsSection" style="display:none">
         <div class="container">
-            <div class="section-title">Settings</div>
-            <div class="expense-card">
-                <div class="expense-item" style="margin-bottom: 12px;">Adjust Monthly Budget</div>
-                <div class="form-group"> <input type="number" inputmode="decimal" id="targetInput" placeholder="Enter Amount"
-                        oninput="updateTargetBudget(this.value)"> </div>
-            </div>
-            <div class="expense-card">
 
-                <div class="expense-item">
-                    Export Backup
-                </div>
-
-                <div class="expense-bottom">
-
-                    <button
-                        class="small-btn note-btn"
-                        onclick="exportData()">
-
-                        Export JSON
-
-                    </button>
-
-                </div>
-
+            <div class="section-title">
+                Settings
             </div>
 
-            <div class="expense-card">
+            <div class="settings-grid">
 
-                <div class="expense-item">
-                    Restore Backup
+                <div class="settings-card">
+
+                    <div class="settings-icon">💰</div>
+
+                    <div class="settings-content">
+
+                        <div class="settings-heading">
+                            Monthly Budget
+                        </div>
+
+                        <div class="settings-subtitle">
+                            Update your spending target
+                        </div>
+
+                        <div class="budget-input-wrap">
+
+        <input
+            type="number"
+            inputmode="decimal"
+            id="targetInput"
+            placeholder="Enter Monthly Budget"
+            oninput="checkBudgetChange()">
+
+        <button
+            id="budgetSaveBtn"
+            class="budget-save-btn"
+            onclick="saveBudgetTarget()"
+            disabled>
+            ✓
+        </button>
+
+    </div>
+
+                    </div>
+
                 </div>
 
-                <div class="expense-bottom">
+                <div class="settings-card">
 
-                    <input
-                    type="file"
-                    id="restoreFile"
-                    accept=".json"
-                    onchange="importData(event)"
-                    style="display:none">
+                    <div class="settings-icon">📤</div>
 
-                    <button
-                    class="small-btn note-btn"
-                    onclick="document.getElementById('restoreFile').click()">
+                    <div class="settings-content">
 
-                    Import JSON
+                        <div class="settings-heading">
+                            Export Backup
+                        </div>
 
-                    </button>
+                        <div class="settings-subtitle">
+                            Save all expenses as JSON
+                        </div>
+
+                        <button
+                            class="settings-btn blue-btn"
+                            onclick="exportData()">
+                            Export JSON
+                        </button>
+
+                    </div>
 
                 </div>
 
-            </div>
+                <div class="settings-card">
 
-            <button
-            class="small-btn note-btn"
-            onclick="exportExcel()">
+                    <div class="settings-icon">📥</div>
 
-            Export Excel
+                    <div class="settings-content">
 
-            </button>
+                        <div class="settings-heading">
+                            Restore Backup
+                        </div>
 
-            <div class="expense-card">
-                <div class="expense-item">Clear All Data</div>
-                <div class="expense-bottom"> <button class="small-btn delete-btn" onclick="clearAllExpenses()">Clear
-                        Data</button> </div>
+                        <div class="settings-subtitle">
+                            Import saved JSON backup
+                        </div>
+
+                        <input
+                            type="file"
+                            id="restoreFile"
+                            accept=".json"
+                            onchange="importData(event)"
+                            style="display:none">
+
+                        <button
+                            class="settings-btn green-btn"
+                            onclick="document.getElementById('restoreFile').click()">
+                            Import JSON
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="settings-card">
+
+                    <div class="settings-icon">📊</div>
+
+                    <div class="settings-content">
+
+                        <div class="settings-heading">
+                            Export Excel
+                        </div>
+
+                        <div class="settings-subtitle">
+                            Download spreadsheet report
+                        </div>
+
+                        <button
+                            class="settings-btn purple-btn"
+                            onclick="exportExcel()">
+                            Export Excel
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="settings-card danger-card">
+
+                    <div class="settings-icon">🗑️</div>
+
+                    <div class="settings-content">
+
+                        <div class="settings-heading">
+                            Clear All Data
+                        </div>
+
+                        <div class="settings-subtitle">
+                            Permanently delete all expenses
+                        </div>
+
+                        <button
+                            class="settings-btn red-btn"
+                            onclick="clearAllExpenses()">
+                            Clear Data
+                        </button>
+
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -1062,167 +1382,186 @@
             return filtered;
         }
 
+        function checkBudgetChange(){
+
+            let inputValue =
+            parseFloat(document.getElementById("targetInput").value) || 0;
+
+            let saveBtn =
+            document.getElementById("budgetSaveBtn");
+
+            saveBtn.disabled = inputValue === monthlyTarget;
+        }
+
+        function saveBudgetTarget(){
+
+            let inputValue =
+            parseFloat(document.getElementById("targetInput").value) || 0;
+
+            monthlyTarget = inputValue;
+
+            localStorage.setItem("modernTarget", monthlyTarget);
+
+            updateUI();
+
+            checkBudgetChange();
+
+            showToast("Budget updated");
+
+            navigator.vibrate?.(40);
+        }
 
         function updateUI() {
 
-            let filteredExpenses =
-            getFilteredExpenses();
+            let filteredExpenses = getFilteredExpenses();
 
-            let total =
-            filteredExpenses.reduce(
+            // FILTER TOTAL
+            let filteredTotal = filteredExpenses.reduce(
+                (s, e) => s + e.amount,
+                0
+            );
+
+            // ACTUAL TOTAL EXPENSES
+            let actualTotal = expenses.reduce(
                 (s, e) => s + e.amount,
                 0
             );
 
             let today = new Date();
 
-            let totalDays =
-            new Date(
+            let totalDays = new Date(
                 today.getFullYear(),
                 today.getMonth() + 1,
                 0
             ).getDate();
 
-            let todayBudget =
-            monthlyTarget / totalDays;
+            let todayString = today.toISOString().split("T")[0];
 
-            // Today's expenses only
-            let todayString =
-            new Date().toISOString().split('T')[0];
+            // TODAY EXPENSE
+            let todayExpense = expenses
+                .filter(e => e.date === todayString)
+                .reduce((s, e) => s + e.amount, 0);
 
-            let todayExpense =
-            expenses
-            .filter(e => e.date === todayString)
-            .reduce((s,e)=>s+e.amount,0);
+            // ✅ FLAG: does today have expense?
+            let todayHasExpense = todayExpense > 0;
 
-            // Monthly remaining
-            let monthlyRemaining =
-            monthlyTarget -
-            expenses.reduce((s,e)=>s+e.amount,0);
+            // MONTH EXPENSE
+            let currentMonthExpense = expenses
+                .filter(e => {
+                    let d = new Date(e.date);
+                    return (
+                        d.getMonth() === today.getMonth() &&
+                        d.getFullYear() === today.getFullYear()
+                    );
+                })
+                .reduce((s, e) => s + e.amount, 0);
 
-            // Daily remaining
-            let dailyRemaining =
-            todayBudget - todayExpense;
+            // MONTHLY REMAINING
+            let monthlyRemaining = monthlyTarget - currentMonthExpense;
 
-            let remaining;
-            let daily;
+            // REMAINING DAYS
+            let remainingDays = totalDays - today.getDate() + 1;
 
-            // FILTER LOGIC
-            if(currentFilter === "today"){
+            if (remainingDays <= 0) remainingDays = 1;
 
-                // Never show negative amount
-                remaining =
-                dailyRemaining > 0
-                ? dailyRemaining
-                : 0;
+            // ✅ PLANNING DAYS (key fix)
+            let planningDays = todayHasExpense
+                ? (remainingDays - 1)
+                : remainingDays;
 
-                daily =
-                dailyRemaining > 0
-                ? dailyRemaining
-                : 0;
+            if (planningDays <= 0) planningDays = 1;
 
-            }
-            else{
+            // SAFE DAILY BUDGET
+            let safeDailyBudget = monthlyRemaining / planningDays;
 
-                remaining = monthlyRemaining;
+            // TODAY BASE (exclude today only if expense exists)
+            let activeMonthExpense = todayHasExpense
+                ? (currentMonthExpense - todayExpense)
+                : currentMonthExpense;
 
-                let remainingDays =
-                totalDays - today.getDate() + 1;
+            let todayBase = monthlyTarget - activeMonthExpense;
 
-                daily =
-                monthlyRemaining > 0
-                ? monthlyRemaining / remainingDays
-                : 0;
+            let todayDailyLimit = todayBase / remainingDays;
 
-            }
+            // TODAY REMAINING
+            let dailyRemaining = todayDailyLimit - todayExpense;
 
+            // DISPLAY VALUES
+            let remainingDisplay =
+                currentFilter === "today"
+                    ? dailyRemaining
+                    : monthlyRemaining;
+
+            let dailyDisplay =
+                currentFilter === "today"
+                    ? dailyRemaining
+                    : safeDailyBudget;
+
+            dailyDisplay = Number(dailyDisplay.toFixed(2));
+
+            // MONTHLY TARGET
             document.getElementById("monthlyTarget")
                 .innerText = formatCurrency(monthlyTarget);
 
+            // TOTAL SPEND
             document.getElementById("totalSpend")
-                .innerText = formatCurrency(total);
+                .innerText = formatCurrency(filteredTotal);
 
+            // REMAINING BUDGET
             let remainingEl =
-            document.getElementById("remainingBudget");
+                document.getElementById("remainingBudget");
 
-            if(currentFilter === "today" && dailyRemaining < 0){
-
+            if (currentFilter === "today" && dailyRemaining < 0) {
                 remainingEl.innerText = "Daily Limit Exceeded";
-
             }
-            else if(currentFilter !== "today" && monthlyRemaining < 0){
-
+            else if (currentFilter !== "today" && monthlyRemaining < 0) {
                 remainingEl.innerText = "Monthly Budget Exceeded";
-
             }
-            else{
-
-                remainingEl.innerText =
-                formatCurrency(remaining);
-
+            else {
+                remainingEl.innerText = formatCurrency(remainingDisplay);
             }
 
             remainingEl.style.color =
-            (
-                (currentFilter === "today" && dailyRemaining < 0)
-                ||
-                (currentFilter !== "today" && monthlyRemaining < 0)
-            )
-            ? "#ef4444"
-            : "white";
+                (
+                    (currentFilter === "today" && dailyRemaining < 0) ||
+                    (currentFilter !== "today" && monthlyRemaining < 0)
+                )
+                    ? "#ef4444"
+                    : "white";
 
+            // DAILY BUDGET
             document.getElementById("dailyBudget")
-                .innerText = formatCurrency(daily);
+                .innerText = formatCurrency(dailyDisplay);
 
+            // ENTRY COUNT
             document.getElementById("expenseCount")
                 .innerText = filteredExpenses.length;
 
-            document.getElementById("filterTotal")
-            .innerHTML =
-            `Showing ${filteredExpenses.length} entries • ₹${formatCurrency(total)}`;
+            // FILTER TEXT
+            document.getElementById("filterTotal").innerHTML =
+                `Showing ${filteredExpenses.length} entries • ₹${formatCurrency(filteredTotal)}`;
 
-            let actualTotal =
-            expenses.reduce((s,e)=>s+e.amount,0);
-
-            let progress =
-            monthlyTarget > 0
-            ? (actualTotal / monthlyTarget) * 100
-            : 0;
+            // PROGRESS
+            let progress = monthlyTarget > 0
+                ? (currentMonthExpense / monthlyTarget) * 100
+                : 0;
 
             progress = Math.min(progress, 100);
 
-            if(progress >= 100){
+            let progressFill = document.getElementById("progressFill");
 
-                showToast("Monthly budget exceeded");
-
-            }
-
-            let progressFill =
-            document.getElementById("progressFill");
-
-            if(progress < 50){
-
+            if (progress < 50) {
                 progressFill.style.background = "#22c55e";
-
-            }
-            else if(progress < 80){
-
+            } else if (progress < 80) {
                 progressFill.style.background = "#f59e0b";
-
-            }
-            else{
-
+            } else {
                 progressFill.style.background = "#ef4444";
-
             }
 
-            document.getElementById("progressFill")
-                .style.width = progress + "%";
+            progressFill.style.width = progress + "%";
 
             renderExpenses();
-
             renderMonthlyBreakdown();
-
             renderCategoryChart(filteredExpenses);
         }
 
@@ -2119,6 +2458,32 @@
             }
 
         });
+
+                // Auto detect new day after 12 AM
+        let lastOpenedDate =
+        new Date().toISOString().split("T")[0];
+
+        setInterval(() => {
+
+            let currentDate =
+            new Date().toISOString().split("T")[0];
+
+            if(currentDate !== lastOpenedDate){
+
+                lastOpenedDate = currentDate;
+
+                document.getElementById("dateInput").value =
+                currentDate;
+
+                updateUI();
+
+                renderHistory();
+
+                showToast("New day started");
+
+            }
+
+        }, 30000);
 
         // Initialize App UI on boot
         updateUI();
