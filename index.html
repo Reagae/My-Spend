@@ -255,32 +255,64 @@
             z-index: 99;
         }
 
+                /* --- ENHANCED APP STYLE BOTTOM NAVIGATION --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 65px;
+            height: 65px; /* Increased height for a roomier feel */
             background: #111827;
             display: flex;
             justify-content: space-around;
             align-items: center;
             border-top: 1px solid #1e293b;
+            padding-bottom: env(safe-area-inset-bottom, 12px); 
             z-index: 99;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .nav-btn {
             background: none;
             border: none;
-            color: #94a3b8;
-            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px; /* Slightly more space between icon and text */
             cursor: pointer;
+            flex: 1;
+            height: 100%;
+            transition: color 0.1s, transform 0.1s;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .nav-btn svg {
+            width: 26px; /* Increased icon size slightly */
+            height: 26px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5; /* Made the icons thicker/bolder */
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.1s;
+        }
+
+        .nav-btn span {
+            font-size: 12px; /* Bumped up text size */
+            font-weight: 800; /* Extra bold text weight */
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .active-nav {
-            color: #3b82f6;
-            font-weight: 700;
+            color: #3b82f6 !important;
         }
+
 
         .modal{
             position:fixed;
@@ -1020,10 +1052,25 @@
         </div>
     </div>
     <div class="fab" onclick="openModal()">+</div>
-    <div class="bottom-nav"> <button class="nav-btn active-nav" onclick="showSection('home',this)">Home</button> <button
-            class="nav-btn" onclick="showSection('stats',this)">Stats</button> <button class="nav-btn"
-            onclick="showSection('history',this)">History</button> <button class="nav-btn"
-            onclick="showSection('settings',this)">Settings</button> </div>
+        <div class="bottom-nav">
+        <button class="nav-btn active-nav" onclick="showSection('home',this)">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span>Home</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('stats',this)">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <span>Stats</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('history',this)">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>History</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('settings',this)">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Settings</span>
+        </button>
+    </div>
+
     <div class="modal" id="modal">
         <div class="modal-content">
             <div class="modal-title" id="modalTitle">Add Expense</div>
